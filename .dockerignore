@@ -1,0 +1,11 @@
+node_modules
+npm-debug.log
+package-lock.json
+
+Dockerfile
+docker-compose.yml
+.git
+.gitignore
+todo.md
+
+database

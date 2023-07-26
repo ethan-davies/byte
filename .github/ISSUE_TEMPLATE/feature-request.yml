@@ -1,0 +1,48 @@
+name: "Feature Request"
+description: "To propose an enhancement"
+title: "[Feature Request]: "
+labels: enhancement
+body:
+  - type: checkboxes
+    id: selfservice
+    attributes:
+      label: Self-service
+      description: "To make thing easier on others, if you wish, you may implement your own feature into our code using a pull request"
+      options:
+        - label: "I'd be willing to implement my code"
+
+  - type: textarea
+    attributes:
+      label: Describe your idea
+      description: |
+        Provide a clear and concise description of your idea so we have a good idea what you want
+      placeholder: |
+        ex: I have always thought a... would be a great implementation because...
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Describe the solution
+      description: |
+        Please provide us with what you think would like to happen
+      placeholder: |
+        ex: I would like it to...
+    validations:
+        required: true
+
+  - type: textarea
+    attributes:
+      label: Consequences
+      description: |
+        Tell as all the downsides to having this installed and how it may break anything else if it does get into the core
+      placeholder: |
+        ex: As of right now I think it may affect... because of...
+    validations:
+        required: true
+
+  - type: textarea
+    attributes:
+      label: Extra
+      description: |
+        Any other information that may need to be needed can be put here.

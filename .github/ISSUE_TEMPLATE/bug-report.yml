@@ -1,0 +1,56 @@
+name: "Bug report"
+description: "For unintended behaviors"
+title: "[Bug]: "
+labels: bug
+body:
+  - type: checkboxes
+    id: selfservice
+    attributes:
+      label: Self-service
+      description: "Fixing bugs can always be done by yourself through a pull request, We're more then to help you with some parts of implementing your own fix."
+      options:
+        - label: "I will implement a fix"
+        
+  - type: textarea
+    attributes:
+      label: Describe the bug
+      description: |
+        Please provide a clear and consice description of your bug. Remember a bug is **unintended** and a feature not being implemented is **not a bug**, and your issue may be closed for misleading labeling.
+      placeholder: |
+        ex: On startup I get this error
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: To reproduce
+      description: |
+        Please provide us with the minimal information needed to recreate this bug - package.json is recommended to provide.
+      placeholder: |
+        To reproduce this you...
+        ```
+    validations:
+        required: true
+
+  - type: textarea
+    attributes:
+      label: Environment
+      render: shell
+      description: |
+        Please show us your OS, CPU and node, Mango and npm versions
+      placeholder: |
+        System:
+          OS: macOS 11.4
+          CPU: (8) x64 Intel(R) Core(TM) i7-8559U CPU @ 2.70GHz
+        Versions:
+          Node: 12.16.0
+          Mango: 1.0.0-beta
+          npm: 6.14.11
+    validations:
+        required: true
+
+  - type: textarea
+    attributes:
+      label: Extra context
+      description: |
+        Any other information that may need to be needed about the problem can be put here.
