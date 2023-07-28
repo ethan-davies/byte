@@ -1,5 +1,0 @@
-{
-  "testMatch": ["**/dist/test/**/*.test.js"],
-  "testTimeout": 10000,
-  "testEnvironment": "node"
-}

@@ -3,23 +3,11 @@ import * as fs from 'fs'
 import * as path from 'path'
 import rateLimit from 'express-rate-limit'
 import { addJsonDataToFile } from '@/api/fileManager'
-import Logger from '@/utils/Logger'
 
 const router = express.Router()
 
 router.get('/', async (req: Request, res: Response) => {
-    const name = req.query.name
-
-    if (name) {
-        return res.status(200).json({
-            message: `Hey, ${name}!`,
-        })
-    } else {
-        return res.status(200).json({
-            message:
-                'Try adding ?name= and your name at the end, so I can greet you!',
-        })
-    }
+    return res.json(`This server utilizes ByteDB's API system`)
 })
 
 const limiter = rateLimit({
@@ -35,19 +23,20 @@ router.post(
         const { database } = req.params
         const { json } = req.body
 
+        const filePath = path.join('./database', `${database}.json`)
+
         if (!json || typeof json !== 'object') {
             return res.status(400).json({ error: 'Invalid JSON data' })
         }
 
-        const filePath = path.join('./database', `${database}.json`)
+
         if (!fs.existsSync(filePath)) {
             return res.status(404).json({ error: 'Database does not exist' })
         }
 
         try {
             // Add the JSON data to the file
-            console.log(json)
-            await addJsonDataToFile(`${database}.json`, json)
+            await addJsonDataToFile(filePath, json)
 
             // Respond with a success message or any relevant data
             return res.json({ message: 'Data uploaded successfully' })

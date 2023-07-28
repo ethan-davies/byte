@@ -1,5 +1,5 @@
 # Byte
-Byte is an npm package that allows you to run a NoSQL JSON database with ease.
+Byte is an [npm package](https://www.npmjs.com/package/@ethan-davies/byte) that allows you to run a NoSQL JSON database with ease.
 
 ## Usage
 First, install the package then initialise the project by doing:
@@ -23,4 +23,3 @@ Then your body would be as an example:
   "json": {"TEST": "This is some data", "TEST 2": "This is also some data"}
 }
 ```
-

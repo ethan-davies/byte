@@ -3,6 +3,9 @@ node_modules
 database
 todo.md
 
+test-file.json
+
+
 dist
 
 # local env files

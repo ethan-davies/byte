@@ -1,6 +1,5 @@
 node_modules
 npm-debug.log
-package-lock.json
 
 Dockerfile
 docker-compose.yml
@@ -8,4 +7,7 @@ docker-compose.yml
 .gitignore
 todo.md
 
+test-file.json
+
 database
+src/test

@@ -4,7 +4,6 @@ import helmet from 'helmet'
 require('dotenv').config()
 
 import main from '@/routes/main'
-import uploadData from '@/routes/uploadData'
 
 class Routes {
     private router: Router

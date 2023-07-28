@@ -1,4 +1,4 @@
-import * as fs from 'fs';
+import * as fs from 'fs'
 import * as path from 'path'
 import express, { Application, Request, Response, NextFunction } from 'express'
 import bodyParser from 'body-parser'
@@ -8,10 +8,8 @@ import helmet from 'helmet'
 require('dotenv').config()
 
 import Logger from '@/utils/Logger'
-
 import Routes from '@/routes'
-
-import { createFile } from '@/api/fileManager'
+import * as FileManager from '@/api/fileManager' // Import FileManager as namespace
 
 export let activeDatabases = []
 
@@ -38,7 +36,6 @@ class Server {
     }
 
     private initializeErrorHandlers() {
-        // Server error handler
         this.app.use(
             (err: any, req: Request, res: Response, next: NextFunction) => {
                 console.error(err.stack)
@@ -46,7 +43,6 @@ class Server {
             }
         )
 
-        // Error handler
         this.app.use((req: Request, res: Response) => {
             res.status(404).json({ message: 'Not found' })
         })
@@ -54,13 +50,14 @@ class Server {
 
     public listen() {
         this.app.listen(this.port, () => {
-            Logger.info(`Initialised database and now listening on port ${this.port}`)
+            Logger.info(
+                `Initialised database and now listening on port ${this.port}`
+            )
         })
     }
 }
 
-
-export function helloWorld(){
+export function helloWorld() {
     console.log('Hello World!')
 }
 
@@ -71,22 +68,22 @@ export class database {
         server.listen()
     }
 
-    static addDatabase(name: string) {
+    static addDatabase(name: string) { // Alias of remind Database
         this.remindDatabase(name)
     }
 
-    static remindDatabase(name: string) { // tells the program that a specific database exists
+    static remindDatabase(name: string) {
         const filePath = path.join('./database', name)
-        fs.access(filePath, fs.constants.F_OK, (err) => {
-            if (err) {
-                createFile(name, "{}") // If there isnt a file then it will create one
-            } else {
+        fs.promises
+            .access(filePath, fs.constants.F_OK)
+            .then(() => {
                 activeDatabases.push(name)
                 console.log(activeDatabases)
-            }
-        })
+            })
+            .catch(() => {
+                FileManager.createFile(filePath, '{}')
+            })
     }
-
 }
 
 function dockerStartup() {
@@ -98,4 +95,7 @@ if (process.env.DOCKER == 'true') {
     dockerStartup()
 }
 
-// * SHOULD be called: byte.database.initialise()
+
+
+database.initialise()
+database.addDatabase('data.json')

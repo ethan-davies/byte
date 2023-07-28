@@ -1,56 +1,76 @@
-import * as fs from 'fs'
-import * as path from 'path'
+import fs from 'fs'
+const path = require('path')
 
-export function createFile(fileName: string, fileContents: any): void {
-    const appendedFileName = `./database/${fileName}`
-    const directoryPath = path.dirname(appendedFileName)
+export async function createFile(
+    fileName: string,
+    fileContents: any,
+): Promise<void> {
+    const directoryPath = path.dirname(fileName)
     try {
         if (!fs.existsSync(directoryPath)) {
             fs.mkdirSync(directoryPath, { recursive: true })
         }
 
-        fs.writeFileSync(appendedFileName, fileContents)
-        console.log(`File '${appendedFileName}' created successfully.`)
+        await fs.promises.writeFile(fileName, fileContents)
+        console.log(`File '${fileName}' created successfully.`)
     } catch (err) {
-        console.error(`Error creating file '${appendedFileName}': ${err}`)
+        console.error(`Error creating file '${fileName}': ${err}`)
+        throw err // Rethrow the error to handle it in the API route handler
     }
 }
 
 export async function addJsonDataToFile(
-    fileName: string,
-    jsonData: object
+    filePath: string,
+    data: any,
 ): Promise<void> {
-    const filePath = path.join('./database', fileName)
-    const jsonString = JSON.stringify(jsonData, null, 2)
-
     try {
-        // Read the existing data from the file, or an empty array if the file is new
-        const existingData = fs.existsSync(filePath)
-            ? fs.readFileSync(filePath, 'utf-8')
-            : '[]'
+        const fullPath = path.resolve(filePath)
+        let existingData: any[] = []
 
-        let dataArray
-        try {
-            dataArray = JSON.parse(existingData)
-            if (!Array.isArray(dataArray)) {
-                throw new Error('Invalid data in the file. Expected an array.')
+        if (fs.existsSync(fullPath)) {
+            const fileContent = fs.readFileSync(fullPath, 'utf-8')
+            try {
+                existingData = JSON.parse(fileContent)
+
+                if (!Array.isArray(existingData)) {
+                    throw new Error(
+                        'Invalid data in the file. Expected a valid JSON array.',
+                    )
+                }
+            } catch (err) {
+                console.error(
+                    `Error parsing JSON data from file '${fullPath}': ${err}`,
+                )
             }
-        } catch (err) {
-            dataArray = [] // If parsing fails or data is not an array, initialize an empty array.
         }
 
-        // Append the new JSON data to the array
-        dataArray.push(jsonData)
-
-        // Write the updated array back to the file
-        await fs.promises.writeFile(
-            filePath,
-            JSON.stringify(dataArray, null, 2)
-        )
-
-        console.log(`JSON data added to file '${fileName}' successfully.`)
+        existingData.push(data)
+        fs.writeFileSync(fullPath, JSON.stringify(existingData, null, 2))
+        console.log(`JSON data added to file '${fullPath}' successfully.`)
     } catch (err) {
-        console.error(`Error adding JSON data to file '${fileName}': ${err}`)
-        throw err // Rethrow the error to handle it in the API route handler
+        console.error(`Error adding JSON data to file '${filePath}': ${err}`)
+        throw err
+    }
+}
+
+export function readJsonDataFromFile(fileName: string): any[] {
+    try {
+        if (!fs.existsSync(fileName)) {
+            throw new Error(`File '${fileName}' does not exist.`)
+        }
+
+        const data = fs.readFileSync(fileName, 'utf8')
+        return JSON.parse(data)
+    } catch (error) {
+        throw new Error(
+            'Invalid data in the file. Expected a valid JSON array.',
+        )
+    }
+}
+
+export function deleteFile(fileName: string): void {
+    if (fs.existsSync(fileName)) {
+        fs.unlinkSync(fileName)
+        console.log(`File '${fileName}' deleted successfully.`)
     }
 }
