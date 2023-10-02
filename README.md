@@ -20,6 +20,6 @@ Then your body would be as an example:
 
 ```json
 {
-  "json": {"TEST": "This is some data", "TEST 2": "This is also some data"}
+  "json": {"TEST": "data1", "TEST 2": "data2"}
 }
 ```
